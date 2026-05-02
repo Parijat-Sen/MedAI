@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedAI — Clinical Decision Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════════════ -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">⚕</span>
+      <div>
+        <div class="logo-name">MedAI</div>
+        <div class="logo-sub">Clinical Decision Support</div>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a href="#analyze" class="nav-link active" data-view="analyze">Analyze</a>
+      <a href="#chat" class="nav-link" data-view="chat">Chat</a>
+      <a href="#metrics" class="nav-link" data-view="metrics">Metrics</a>
+    </nav>
+    <div class="status-badge" id="statusBadge">
+      <span class="status-dot"></span>
+      <span id="statusText">Connecting...</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════
+     SAFETY BANNER
+═══════════════════════════════════════════════════════ -->
+<div class="safety-banner">
+  <span class="safety-icon">⚠</span>
+  <span>MedAI is an AI research tool for educational purposes only. It does <strong>NOT</strong> replace professional medical advice. Always consult a qualified healthcare provider.</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════════════ -->
+<main class="main">
+
+  <!-- ── ANALYZE VIEW ─────────────────────────────────── -->
+  <div id="view-analyze" class="view active">
+    <div class="grid-layout">
+
+      <!-- LEFT: Input Panel -->
+      <section class="panel panel-input">
+        <div class="panel-header">
+          <h2 class="panel-title">Symptom Input</h2>
+          <span class="panel-badge">ML + RAG + LLM</span>
+        </div>
+
+        <div class="input-section">
+          <label class="field-label">Describe your symptoms in natural language</label>
+          <textarea
+            id="symptomText"
+            class="symptom-textarea"
+            placeholder="e.g., I have had high fever, severe headache, and body aches for the past 3 days. Also feeling very tired and chills..."
+            rows="5"
+          ></textarea>
+
+          <div class="symptom-tags-area">
+            <label class="field-label">Detected Symptoms</label>
+            <div id="symptomTags" class="symptom-tags">
+              <span class="tag-placeholder">Symptoms will appear here after analysis...</span>
+            </div>
+          </div>
+
+          <div class="quick-add">
+            <label class="field-label">Quick Add Common Symptoms</label>
+            <div class="quick-buttons">
+              <button class="quick-btn" onclick="addQuickSymptom('fever')">Fever</button>
+              <button class="quick-btn" onclick="addQuickSymptom('headache')">Headache</button>
+              <button class="quick-btn" onclick="addQuickSymptom('cough')">Cough</button>
+              <button class="quick-btn" onclick="addQuickSymptom('fatigue')">Fatigue</button>
+              <button class="quick-btn" onclick="addQuickSymptom('nausea')">Nausea</button>
+              <button class="quick-btn" onclick="addQuickSymptom('chest pain')">Chest Pain</button>
+              <button class="quick-btn" onclick="addQuickSymptom('shortness of breath')">Breathlessness</button>
+              <button class="quick-btn" onclick="addQuickSymptom('joint pain')">Joint Pain</button>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button id="analyzeBtn" class="btn-primary" onclick="analyzeSymptoms()">
+              <span class="btn-icon">🔬</span> Analyze Symptoms
+            </button>
+            <button class="btn-secondary" onclick="clearAll()">Clear</button>
+          </div>
+
+          <div class="pipeline-info">
+            <div class="pipeline-step">
+              <div class="step-num">1</div>
+              <div class="step-label">NLP Extraction</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-step">
+              <div class="step-num">2</div>
+              <div class="step-label">ML Prediction</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-step">
+              <div class="step-num">3</div>
+              <div class="step-label">RAG Retrieval</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-step">
+              <div class="step-num">4</div>
+              <div class="step-label">LLM Analysis</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: Results Panel -->
+      <section class="panel panel-results" id="resultsPanel">
+        <div class="panel-header">
+          <h2 class="panel-title">Analysis Results</h2>
+          <span id="processingTime" class="panel-badge" style="display:none"></span>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state" style="display:none">
+          <div class="loading-spinner"></div>
+          <div class="loading-steps">
+            <div class="loading-step active" id="ls1">Extracting symptoms...</div>
+            <div class="loading-step" id="ls2">Running ML model...</div>
+            <div class="loading-step" id="ls3">Searching medical database...</div>
+            <div class="loading-step" id="ls4">Generating LLM analysis...</div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">🩺</div>
+          <div class="empty-title">Ready for Analysis</div>
+          <div class="empty-text">Enter your symptoms on the left and click "Analyze Symptoms" to get a comprehensive clinical assessment powered by ML + RAG + LLM.</div>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsContent" style="display:none">
+
+          <!-- Predictions -->
+          <div class="results-section">
+            <div class="section-label">Disease Predictions <span class="section-badge">ML Model</span></div>
+            <div id="predictionsGrid" class="predictions-grid"></div>
+          </div>
+
+          <!-- LLM Explanation -->
+          <div class="results-section">
+            <div class="section-label">Clinical Analysis <span class="section-badge">LLM + RAG</span></div>
+            <div id="llmExplanation" class="llm-explanation"></div>
+          </div>
+
+          <!-- Red Flags -->
+          <div id="redFlagsSection" class="results-section" style="display:none">
+            <div class="section-label">⚠ Red Flags — Seek Urgent Care</div>
+            <div id="redFlags" class="red-flags"></div>
+          </div>
+
+          <!-- Follow-up Questions -->
+          <div class="results-section">
+            <div class="section-label">Suggested Follow-up Questions</div>
+            <div id="followUpQuestions" class="followup-list"></div>
+          </div>
+
+          <!-- Recommended Actions -->
+          <div class="results-section">
+            <div class="section-label">Recommended Actions</div>
+            <div id="recommendedActions" class="actions-list"></div>
+          </div>
+
+          <!-- Disclaimer -->
+          <div class="disclaimer-box">
+            <span class="disclaimer-icon">ℹ</span>
+            <span id="disclaimerText"></span>
+          </div>
+
+          <!-- Chat CTA -->
+          <button class="btn-chat-cta" onclick="startChat()">
+            💬 Continue in Chat — Ask Follow-up Questions
+          </button>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error-state" style="display:none">
+          <div class="error-icon">⚠</div>
+          <div class="error-message" id="errorMessage"></div>
+          <button class="btn-secondary" onclick="clearError()">Try Again</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ── CHAT VIEW ─────────────────────────────────────── -->
+  <div id="view-chat" class="view">
+    <div class="chat-container">
+      <div class="chat-header">
+        <h2>Follow-up Conversation</h2>
+        <p>Continue your consultation — ask follow-up questions about your analysis.</p>
+        <div id="chatSessionInfo" class="chat-session-info"></div>
+      </div>
+
+      <div id="chatMessages" class="chat-messages">
+        <div class="chat-message assistant">
+          <div class="msg-avatar">⚕</div>
+          <div class="msg-bubble">
+            Hello! I'm MedAI, your clinical decision support assistant. Please run a symptom analysis first from the Analyze tab, then return here to ask follow-up questions about your results.
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <input
+          type="text"
+          id="chatInput"
+          class="chat-input"
+          placeholder="Ask a follow-up question..."
+          onkeydown="if(event.key==='Enter') sendChat()"
+          disabled
+        />
+        <button id="chatSendBtn" class="btn-send" onclick="sendChat()" disabled>Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── METRICS VIEW ──────────────────────────────────── -->
+  <div id="view-metrics" class="view">
+    <div class="metrics-container">
+      <div class="metrics-header">
+        <h2>Model Performance Metrics</h2>
+        <p>Evaluation results from training across multiple ML models.</p>
+        <button class="btn-secondary" onclick="loadMetrics()">Refresh Metrics</button>
+      </div>
+
+      <div id="metricsContent" class="metrics-content">
+        <div class="loading-state">
+          <div class="loading-spinner"></div>
+          <p>Loading metrics...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

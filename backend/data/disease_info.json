@@ -1,0 +1,391 @@
+{
+  "Influenza (Flu)": {
+    "description": "Influenza is a contagious respiratory illness caused by influenza viruses. It can cause mild to severe illness, and in some cases can lead to hospitalization or death.",
+    "severity": "moderate",
+    "specialist": "General Physician",
+    "urgency": "See doctor within 24-48 hours if symptoms are severe",
+    "all_symptoms": [
+      "fever",
+      "chills",
+      "muscle_aches",
+      "fatigue",
+      "headache",
+      "sore_throat",
+      "runny_nose",
+      "cough",
+      "loss_of_appetite",
+      "vomiting",
+      "diarrhea",
+      "chest_pain"
+    ]
+  },
+  "Common Cold": {
+    "description": "The common cold is a viral infection of the upper respiratory tract. It is usually harmless and resolves on its own within 7-10 days.",
+    "severity": "mild",
+    "specialist": "General Physician",
+    "urgency": "Self-care at home; see doctor if symptoms worsen after 10 days",
+    "all_symptoms": [
+      "runny_nose",
+      "sneezing",
+      "sore_throat",
+      "congestion",
+      "mild_fever",
+      "cough",
+      "watery_eyes",
+      "fatigue",
+      "headache",
+      "muscle_aches",
+      "loss_of_appetite"
+    ]
+  },
+  "Pneumonia": {
+    "description": "Pneumonia is an infection that inflames the air sacs in one or both lungs. The air sacs may fill with fluid or pus, causing cough, fever, chills, and difficulty breathing.",
+    "severity": "severe",
+    "specialist": "Pulmonologist",
+    "urgency": "Seek immediate medical attention",
+    "all_symptoms": [
+      "high_fever",
+      "chest_pain",
+      "cough_with_mucus",
+      "shortness_of_breath",
+      "fatigue",
+      "chills",
+      "nausea",
+      "vomiting",
+      "confusion",
+      "sweating",
+      "rapid_heartbeat"
+    ]
+  },
+  "Diabetes Mellitus Type 2": {
+    "description": "Type 2 diabetes is a chronic condition that affects the way the body metabolizes sugar (glucose). With type 2 diabetes, the body either doesn't produce enough insulin, or it doesn't use insulin properly.",
+    "severity": "chronic",
+    "specialist": "Endocrinologist",
+    "urgency": "Schedule appointment with doctor within a week",
+    "all_symptoms": [
+      "frequent_urination",
+      "excessive_thirst",
+      "increased_hunger",
+      "unexplained_weight_loss",
+      "fatigue",
+      "blurred_vision",
+      "slow_healing_wounds",
+      "frequent_infections",
+      "numbness_in_hands_feet",
+      "tingling_sensation",
+      "dark_skin_patches"
+    ]
+  },
+  "Hypertension": {
+    "description": "Hypertension (high blood pressure) is a common condition in which the long-term force of the blood against artery walls is high enough that it may eventually cause health problems.",
+    "severity": "moderate",
+    "specialist": "Cardiologist",
+    "urgency": "See doctor within 1-2 days if BP is very high",
+    "all_symptoms": [
+      "headache",
+      "dizziness",
+      "blurred_vision",
+      "chest_pain",
+      "shortness_of_breath",
+      "nosebleeds",
+      "fatigue",
+      "irregular_heartbeat",
+      "blood_in_urine",
+      "pounding_in_chest",
+      "vision_problems"
+    ]
+  },
+  "Malaria": {
+    "description": "Malaria is a serious and sometimes fatal disease caused by a parasite that commonly infects a certain type of mosquito that feeds on humans.",
+    "severity": "severe",
+    "specialist": "Infectious Disease Specialist",
+    "urgency": "Seek immediate medical attention",
+    "all_symptoms": [
+      "cyclical_fever",
+      "chills",
+      "sweating",
+      "headache",
+      "nausea",
+      "vomiting",
+      "muscle_pain",
+      "fatigue",
+      "jaundice",
+      "confusion",
+      "anemia",
+      "rapid_breathing"
+    ]
+  },
+  "Typhoid Fever": {
+    "description": "Typhoid fever is a bacterial infection caused by Salmonella typhi. It spreads through contaminated food and water and causes high fever, abdominal pain, and other symptoms.",
+    "severity": "severe",
+    "specialist": "Infectious Disease Specialist",
+    "urgency": "Seek medical attention immediately",
+    "all_symptoms": [
+      "sustained_high_fever",
+      "abdominal_pain",
+      "headache",
+      "weakness",
+      "constipation",
+      "diarrhea",
+      "loss_of_appetite",
+      "rose_spots",
+      "confusion",
+      "agitation",
+      "hallucinations",
+      "relative_bradycardia"
+    ]
+  },
+  "Dengue Fever": {
+    "description": "Dengue fever is a mosquito-borne tropical disease caused by the dengue virus. It causes flu-like symptoms including fever, headache, muscle and joint pains, and a characteristic rash.",
+    "severity": "severe",
+    "specialist": "Infectious Disease Specialist",
+    "urgency": "Seek immediate medical attention",
+    "all_symptoms": [
+      "sudden_high_fever",
+      "severe_headache",
+      "pain_behind_eyes",
+      "joint_muscle_pain",
+      "skin_rash",
+      "mild_bleeding",
+      "nausea",
+      "vomiting",
+      "severe_abdominal_pain",
+      "rapid_breathing",
+      "bleeding_gums",
+      "fatigue"
+    ]
+  },
+  "Migraine": {
+    "description": "A migraine is a powerful headache that often happens with nausea, vomiting, and extreme sensitivity to light and sound. Migraine attacks can last for hours to days.",
+    "severity": "moderate",
+    "specialist": "Neurologist",
+    "urgency": "See doctor if migraines are frequent or worsening",
+    "all_symptoms": [
+      "severe_headache",
+      "throbbing_pain_one_side",
+      "nausea",
+      "sensitivity_to_light",
+      "sensitivity_to_sound",
+      "vomiting",
+      "visual_disturbances",
+      "aura",
+      "neck_stiffness",
+      "confusion",
+      "tingling_in_face",
+      "weakness"
+    ]
+  },
+  "Gastroenteritis": {
+    "description": "Gastroenteritis is inflammation of the stomach and intestines, typically caused by a viral or bacterial infection. It causes diarrhea, vomiting, and stomach pain.",
+    "severity": "mild",
+    "specialist": "Gastroenterologist",
+    "urgency": "Self-care; see doctor if symptoms last more than 3 days",
+    "all_symptoms": [
+      "diarrhea",
+      "nausea",
+      "vomiting",
+      "stomach_cramps",
+      "fever",
+      "loss_of_appetite",
+      "dehydration",
+      "headache",
+      "muscle_aches",
+      "blood_in_stool",
+      "severe_abdominal_pain"
+    ]
+  },
+  "Asthma": {
+    "description": "Asthma is a condition in which your airways narrow and swell and may produce extra mucus. This can make breathing difficult and trigger coughing, a whistling sound (wheezing) when you breathe out and shortness of breath.",
+    "severity": "moderate",
+    "specialist": "Pulmonologist / Allergist",
+    "urgency": "Seek emergency help if breathing is severely impaired",
+    "all_symptoms": [
+      "shortness_of_breath",
+      "wheezing",
+      "chest_tightness",
+      "coughing",
+      "difficulty_sleeping",
+      "shortness_of_breath_on_exercise",
+      "fatigue",
+      "rapid_breathing",
+      "bluish_lips",
+      "anxiety",
+      "sweating"
+    ]
+  },
+  "Urinary Tract Infection (UTI)": {
+    "description": "A urinary tract infection (UTI) is an infection in any part of the urinary system. Most infections involve the lower urinary tract \u2014 the bladder and the urethra.",
+    "severity": "mild",
+    "specialist": "Urologist",
+    "urgency": "See doctor within 1-2 days",
+    "all_symptoms": [
+      "burning_urination",
+      "frequent_urination",
+      "cloudy_urine",
+      "pelvic_pain",
+      "strong_smelling_urine",
+      "blood_in_urine",
+      "lower_back_pain",
+      "fever",
+      "nausea",
+      "vomiting",
+      "shaking_chills",
+      "confusion"
+    ]
+  },
+  "Anemia": {
+    "description": "Anemia is a condition in which you lack enough healthy red blood cells to carry adequate oxygen to your body's tissues. Having anemia, also referred to as low hemoglobin, can make you feel tired and weak.",
+    "severity": "moderate",
+    "specialist": "Hematologist",
+    "urgency": "See doctor within a few days",
+    "all_symptoms": [
+      "fatigue",
+      "weakness",
+      "pale_skin",
+      "shortness_of_breath",
+      "dizziness",
+      "irregular_heartbeat",
+      "chest_pain",
+      "cold_extremities",
+      "headache",
+      "cognitive_problems",
+      "brittle_nails",
+      "unusual_cravings"
+    ]
+  },
+  "Appendicitis": {
+    "description": "Appendicitis is an inflammation of the appendix. It's a medical emergency that almost always requires prompt surgery to remove the appendix.",
+    "severity": "emergency",
+    "specialist": "Surgeon",
+    "urgency": "EMERGENCY - Seek immediate medical attention",
+    "all_symptoms": [
+      "severe_abdominal_pain_right_lower",
+      "nausea",
+      "vomiting",
+      "fever",
+      "loss_of_appetite",
+      "abdominal_bloating",
+      "inability_to_pass_gas",
+      "diarrhea",
+      "constipation",
+      "inability_to_stand_straight",
+      "back_pain"
+    ]
+  },
+  "Tuberculosis (TB)": {
+    "description": "Tuberculosis (TB) is a potentially serious infectious disease that mainly affects the lungs. The bacteria that cause tuberculosis are spread from person to person through tiny droplets released into the air.",
+    "severity": "severe",
+    "specialist": "Pulmonologist / Infectious Disease Specialist",
+    "urgency": "See doctor immediately",
+    "all_symptoms": [
+      "persistent_cough_3_weeks",
+      "coughing_blood",
+      "chest_pain",
+      "weight_loss",
+      "fatigue",
+      "fever",
+      "night_sweats",
+      "chills",
+      "loss_of_appetite",
+      "swollen_lymph_nodes",
+      "joint_pain"
+    ]
+  },
+  "COVID-19": {
+    "description": "COVID-19 is a respiratory illness caused by the SARS-CoV-2 virus. Symptoms range from mild to severe and can include fever, cough, and difficulty breathing.",
+    "severity": "moderate",
+    "specialist": "General Physician / Pulmonologist",
+    "urgency": "Isolate and consult doctor; seek emergency care if breathing is difficult",
+    "all_symptoms": [
+      "fever",
+      "dry_cough",
+      "fatigue",
+      "loss_of_taste_smell",
+      "sore_throat",
+      "headache",
+      "body_aches",
+      "shortness_of_breath",
+      "chest_pain",
+      "confusion",
+      "difficulty_speaking",
+      "skin_rash"
+    ]
+  },
+  "Chicken Pox": {
+    "description": "Chickenpox is a highly contagious viral infection causing an itchy, blister-like rash on the skin. It is caused by the varicella-zoster virus.",
+    "severity": "mild",
+    "specialist": "General Physician / Dermatologist",
+    "urgency": "Consult doctor for antiviral treatment if needed",
+    "all_symptoms": [
+      "itchy_blisters",
+      "fever",
+      "tiredness",
+      "loss_of_appetite",
+      "headache",
+      "stomach_ache",
+      "skin_rash_spreading",
+      "secondary_bacterial_infection",
+      "pneumonia",
+      "brain_inflammation"
+    ]
+  },
+  "Jaundice": {
+    "description": "Jaundice is a condition in which the skin, whites of the eyes and mucous membranes turn yellow because of a high level of bilirubin, a yellow-orange bile pigment.",
+    "severity": "moderate",
+    "specialist": "Gastroenterologist / Hepatologist",
+    "urgency": "See doctor within 1-2 days",
+    "all_symptoms": [
+      "yellow_skin",
+      "yellow_eyes",
+      "dark_urine",
+      "fatigue",
+      "abdominal_pain",
+      "pale_stool",
+      "itching",
+      "weight_loss",
+      "fever",
+      "vomiting",
+      "loss_of_appetite",
+      "confusion"
+    ]
+  },
+  "Arthritis": {
+    "description": "Arthritis is inflammation of one or more joints, causing pain and stiffness that can worsen with age. The most common types are osteoarthritis and rheumatoid arthritis.",
+    "severity": "chronic",
+    "specialist": "Rheumatologist",
+    "urgency": "Schedule appointment with specialist",
+    "all_symptoms": [
+      "joint_pain",
+      "joint_stiffness",
+      "joint_swelling",
+      "reduced_range_of_motion",
+      "fatigue",
+      "warmth_around_joints",
+      "redness_around_joints",
+      "fever",
+      "weight_loss",
+      "anemia",
+      "skin_nodules"
+    ]
+  },
+  "Heart Attack (Myocardial Infarction)": {
+    "description": "A heart attack occurs when the flow of blood to the heart is severely reduced or blocked. The blockage is usually due to a buildup of fat, cholesterol and other substances in the heart arteries.",
+    "severity": "emergency",
+    "specialist": "Cardiologist",
+    "urgency": "EMERGENCY - Call ambulance immediately (dial 112)",
+    "all_symptoms": [
+      "chest_pain_pressure",
+      "pain_radiating_to_arm_jaw",
+      "shortness_of_breath",
+      "sweating",
+      "nausea",
+      "lightheadedness",
+      "fatigue",
+      "rapid_heartbeat",
+      "indigestion_like_pain",
+      "upper_back_pain",
+      "anxiety",
+      "cold_sweat"
+    ]
+  }
+}

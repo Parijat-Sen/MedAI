@@ -1,0 +1,18 @@
+# Virtual environment
+venv/
+__pycache__/
+*.pyc
+
+# Environment file
+.env
+
+# Model files (optional large files)
+*.pkl
+*.index
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
