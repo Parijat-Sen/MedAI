@@ -1,5 +1,5 @@
 """
-MedAI — FastAPI Backend (FINAL PRODUCTION READY)
+MedAI — FastAPI Backend (RAILWAY OPTIMIZED + ML LAZY LOAD)
 """
 
 from fastapi.responses import JSONResponse, FileResponse
@@ -37,14 +37,12 @@ from backend.utils.symptom_extractor import SymptomExtractor
 # =========================
 # GLOBAL SERVICES
 # =========================
-ml_predictor = None
+ml_predictor = None   # ✅ lazy load
 rag_pipeline = None
 llm_service = None
 symptom_extractor = None
 
-# ✅ chat memory
 chat_sessions: Dict[str, List[Dict]] = {}
-
 
 # =========================
 # PATHS
@@ -53,10 +51,6 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 FRONTEND_DIR = BASE_DIR / "frontend"
 STATIC_DIR = FRONTEND_DIR / "static"
 TEMPLATES_DIR = FRONTEND_DIR / "templates"
-
-logger.info(f"BASE_DIR: {BASE_DIR}")
-logger.info(f"STATIC_DIR exists: {STATIC_DIR.exists()}")
-logger.info(f"TEMPLATES_DIR exists: {TEMPLATES_DIR.exists()}")
 
 
 # =========================
@@ -80,19 +74,13 @@ class ChatRequest(BaseModel):
 
 
 # =========================
-# STARTUP
+# STARTUP (NO ML LOAD HERE)
 # =========================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global ml_predictor, rag_pipeline, llm_service, symptom_extractor
+    global rag_pipeline, llm_service, symptom_extractor
 
     logger.info("🚀 Starting MedAI...")
-
-    try:
-        ml_predictor = MLPredictor()
-        logger.success("✅ ML loaded")
-    except Exception as e:
-        logger.error(f"ML error: {e}")
 
     try:
         rag_pipeline = RAGPipeline()
@@ -101,17 +89,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"RAG error: {e}")
 
-    if not os.getenv("OPENAI_API_KEY"):
-        logger.warning("⚠️ OPENAI_API_KEY not found")
-
     try:
         llm_service = LLMService()
-        logger.success(f"✅ LLM ready: {llm_service.manager.provider}")
+        logger.success(f"✅ LLM ready")
     except Exception as e:
         logger.error(f"LLM error: {e}")
 
-    symptoms = ml_predictor.get_all_symptoms() if ml_predictor else []
-    symptom_extractor = SymptomExtractor(symptoms)
+    # initially empty (ML not loaded yet)
+    symptom_extractor = SymptomExtractor([])
 
     yield
     logger.info("🛑 Shutting down...")
@@ -132,8 +117,6 @@ app = FastAPI(
 # =========================
 if STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-else:
-    logger.error(f"❌ Static folder missing: {STATIC_DIR}")
 
 
 # =========================
@@ -156,28 +139,16 @@ async def global_exception_handler(request: Request, exc: Exception):
     logger.error(f"Unhandled Error: {exc}")
     return JSONResponse(
         status_code=500,
-        content={
-            "status": "error",
-            "message": "Internal Server Error",
-            "detail": str(exc)
-        }
+        content={"status": "error", "message": str(exc)}
     )
 
 
 # =========================
-# ROOT → UI
+# ROOT
 # =========================
 @app.get("/")
 async def serve_ui():
-    index_file = TEMPLATES_DIR / "index.html"
-
-    if index_file.exists():
-        return FileResponse(index_file)
-
-    return JSONResponse(
-        status_code=500,
-        content={"error": "index.html not found"}
-    )
+    return FileResponse(TEMPLATES_DIR / "index.html")
 
 
 # =========================
@@ -189,9 +160,26 @@ async def health():
         "status": "ok",
         "ml": ml_predictor is not None,
         "rag": rag_pipeline is not None,
-        "llm": llm_service is not None,
-        "provider": llm_service.manager.provider if llm_service else "none"
+        "llm": llm_service is not None
     }
+
+
+# =========================
+# LAZY LOAD ML
+# =========================
+def get_ml():
+    global ml_predictor, symptom_extractor
+
+    if ml_predictor is None:
+        logger.info("⚡ Loading ML model (lazy)...")
+        ml_predictor = MLPredictor()
+
+        # update extractor after loading
+        symptom_extractor = SymptomExtractor(
+            ml_predictor.get_all_symptoms()
+        )
+
+    return ml_predictor
 
 
 # =========================
@@ -200,22 +188,17 @@ async def health():
 @app.post("/api/analyze")
 async def analyze(request: AnalyzeRequest):
     try:
-        if not ml_predictor:
-            raise Exception("ML not loaded")
+        ml = get_ml()
 
-        symptoms, unrecognized = symptom_extractor.extract(request.text)
+        symptoms, _ = symptom_extractor.extract(request.text)
 
         if not symptoms:
             return JSONResponse(
                 status_code=400,
-                content={
-                    "status": "error",
-                    "message": "No valid symptoms",
-                    "unrecognized": unrecognized
-                }
+                content={"status": "error", "message": "No valid symptoms"}
             )
 
-        ml_result = ml_predictor.predict(symptoms)
+        ml_result = ml.predict(symptoms)
         predictions = ml_result.get("predictions", [])
 
         rag_context = ""
@@ -230,7 +213,6 @@ async def analyze(request: AnalyzeRequest):
 
         llm_res = llm_service.analyze(symptoms, predictions, rag_context)
 
-        # ✅ create session
         session_id = str(uuid.uuid4())
         chat_sessions[session_id] = []
 
@@ -241,8 +223,8 @@ async def analyze(request: AnalyzeRequest):
             "predictions": predictions,
             "llm": {
                 "explanation": llm_res.explanation,
-                "follow_up_questions": llm_res.follow_up_questions,
-                "recommended_actions": llm_res.recommended_actions,
+                "questions": llm_res.follow_up_questions,
+                "actions": llm_res.recommended_actions,
                 "red_flags": llm_res.red_flags,
                 "disclaimer": llm_res.disclaimer
             }
@@ -257,12 +239,11 @@ async def analyze(request: AnalyzeRequest):
 
 
 # =========================
-# CHAT (FIXED)
+# CHAT
 # =========================
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
     try:
-        # ✅ always create session if missing
         if request.session_id not in chat_sessions:
             chat_sessions[request.session_id] = []
 
@@ -280,17 +261,10 @@ async def chat(request: ChatRequest):
         session.append({"role": "user", "content": request.message})
         session.append({"role": "assistant", "content": response_text})
 
-        return {
-            "status": "success",
-            "response": response_text
-        }
+        return {"status": "success", "response": response_text}
 
     except Exception as e:
-        logger.error(f"Chat error: {e}")
         return JSONResponse(
             status_code=500,
-            content={
-                "status": "error",
-                "message": str(e)
-            }
+            content={"status": "error", "message": str(e)}
         )
